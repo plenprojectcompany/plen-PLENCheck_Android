@@ -2,32 +2,46 @@
 <items version="2" >
 
     <item
-        jar="/Users/yuki/Workspace/PLENCheck/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
+        jar="/Users/Kazu/AndroidProjects/plen-PLENCheck_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.1.0/jars/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
-        <dex dex="/Users/yuki/Workspace/PLENCheck/app/build/intermediates/pre-dexed/debug/classes-c4b3d89443d286192ec96822de2c9c17fe99ba6e.jar" />
+        sha1="d0dda274b703dd9c5bb056867649d22b4171ae7d">
+        <dex dex="/Users/Kazu/AndroidProjects/plen-PLENCheck_Android/app/build/intermediates/pre-dexed/debug/classes-42db34aea77b9424e8fa24034fb0dbc4ab00853e.jar" />
     </item>
     <item
-        jar="/Users/yuki/Workspace/PLENCheck/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
+        jar="/Users/Kazu/AndroidProjects/plen-PLENCheck_Android/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
-        <dex dex="/Users/yuki/Workspace/PLENCheck/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-8a13b716967edac3b40381f4d28cc46d3bcb59cc.jar" />
+        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
+        <dex dex="/Users/Kazu/AndroidProjects/plen-PLENCheck_Android/app/build/intermediates/pre-dexed/debug/classes-4ce374b03c442acd5bc3bcb9c747a422b012a3ff.jar" />
     </item>
     <item
-        jar="/Users/yuki/Workspace/PLENCheck/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/classes.jar"
+        jar="/Users/Kazu/AndroidProjects/plen-PLENCheck_Android/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/libs/internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
+        <dex dex="/Users/Kazu/AndroidProjects/plen-PLENCheck_Android/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.0-0d616091e820818814b3161992bac77246a26294.jar" />
+    </item>
+    <item
+        jar="/Users/Kazu/AndroidProjects/plen-PLENCheck_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4477ea44f5ec5ad064022a22691732d7638ff197">
+        <dex dex="/Users/Kazu/AndroidProjects/plen-PLENCheck_Android/app/build/intermediates/pre-dexed/debug/classes-09b9f3f8e32a535883407c000d4f414d47e5e12b.jar" />
+    </item>
+    <item
+        jar="/Users/Kazu/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.0/support-annotations-22.2.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
+        <dex dex="/Users/Kazu/AndroidProjects/plen-PLENCheck_Android/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.0-067034f03cbd7cada6cd0dac8bf8f30b2b6584db.jar" />
+    </item>
+    <item
+        jar="/Users/Kazu/AndroidProjects/plen-PLENCheck_Android/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/jars/classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
-        <dex dex="/Users/yuki/Workspace/PLENCheck/app/build/intermediates/pre-dexed/debug/classes-58e60bc66aae9954e5047c8805194d2f3f8839c6.jar" />
-    </item>
-    <item
-        jar="/Applications/adt-bundle-mac-x86_64/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
-        <dex dex="/Users/yuki/Workspace/PLENCheck/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-5fcb6ab5b44a575924a36f3d1295945808dbeb08.jar" />
+        <dex dex="/Users/Kazu/AndroidProjects/plen-PLENCheck_Android/app/build/intermediates/pre-dexed/debug/classes-36164fb1f477d74d4191d4d37ea420ccf53d6307.jar" />
     </item>
 
 </items>
