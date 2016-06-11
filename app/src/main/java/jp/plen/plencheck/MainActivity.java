@@ -1,7 +1,11 @@
 package jp.plen.plencheck;
 
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -19,6 +23,8 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import jp.plen.plencheck.ble.BLEDevice;
+import jp.plen.plencheck.plencheck.services.PlenConnectionService_;
+import jp.plen.plencheck.plencheck.services.PlenScanService_;
 
 
 public class MainActivity extends ActionBarActivity implements BLEDevice.BLECallbacks {
@@ -26,6 +32,26 @@ public class MainActivity extends ActionBarActivity implements BLEDevice.BLECall
     private boolean isClearChecked = false;
     private int checkedNum = 0;
     private BLEDevice bleDevice;
+
+    private final ServiceConnection mPlenConnectionService = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+        }
+    };
+    private final ServiceConnection mPlenScanService = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+        }
+    };
+
     private int map[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 13, 14, 15, 16, 17, 18, 19, 20};
     private int default_position[] = {
             -40, 245, 470, -100, -205, 50, 445, 245, -75, 15, -70, -390, 250, 195, -105, -510, -305, 60
@@ -84,6 +110,10 @@ public class MainActivity extends ActionBarActivity implements BLEDevice.BLECall
 
         vs.setProgress(default_position[0]+900);
         tv.setText(String.valueOf(vs.getProgress() ));
+
+        // 通信用Service起動
+        bindService(new Intent(this, PlenConnectionService_.class), mPlenConnectionService, BIND_AUTO_CREATE);
+        bindService(new Intent(this, PlenScanService_.class), mPlenScanService, BIND_AUTO_CREATE);
 
         iv.setOnTouchListener(
                 new View.OnTouchListener() {
@@ -184,9 +214,6 @@ public class MainActivity extends ActionBarActivity implements BLEDevice.BLECall
                     }
                 }
         );
-
-        bleDevice = new BLEDevice(this);
-        bleDevice.setBLECallbacks(this);
 
         Button homeButton = (Button) findViewById(R.id.button);
         homeButton.setOnClickListener(new View.OnClickListener() {
