@@ -29,7 +29,7 @@ import jp.plen.plencheck.ble.BLEDevice;
 import jp.plen.plencheck.services.PlenConnectionService_;
 import jp.plen.plencheck.services.PlenScanService_;
 
-@EActivity(R.layout.activity_main)
+@EActivity
 public class MainActivity extends ActionBarActivity implements BLEDevice.BLECallbacks {
     private String TAG = "MainActivity";
     private boolean isClearChecked = false;
@@ -105,6 +105,7 @@ public class MainActivity extends ActionBarActivity implements BLEDevice.BLECall
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         final SeekBar vs = (SeekBar) findViewById(R.id.seekBar);
         final TextView tv = (TextView) findViewById(R.id.textView);
