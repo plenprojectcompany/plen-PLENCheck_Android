@@ -1,4 +1,4 @@
-package jp.plen.plencheck.plencheck.utils;
+package jp.plen.plencheck.utils;
 
 import android.graphics.Rect;
 import android.support.annotation.NonNull;

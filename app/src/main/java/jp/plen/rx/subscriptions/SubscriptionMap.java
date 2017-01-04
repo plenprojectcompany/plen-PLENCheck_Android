@@ -1,4 +1,4 @@
-package jp.plen.plencheck.rx.subscriptions;
+package jp.plen.rx.subscriptions;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;

@@ -1,4 +1,4 @@
-package jp.plen.plencheck.plencheck.exceptions;
+package jp.plen.plencheck.exceptions;
 
 public class BluetoothUnavailableException extends PlenConnectionException {
     private static final long serialVersionUID = 977731427742912901L;

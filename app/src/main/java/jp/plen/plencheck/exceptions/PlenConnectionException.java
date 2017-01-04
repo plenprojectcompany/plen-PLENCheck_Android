@@ -1,4 +1,4 @@
-package jp.plen.plencheck.plencheck.exceptions;
+package jp.plen.plencheck.exceptions;
 
 /**
  * PLENとのBluetooth通信関連の例外.

@@ -1,4 +1,4 @@
-package jp.plen.plencheck.plencheck.exceptions;
+package jp.plen.plencheck.exceptions;
 
 public class ScenographyRuntimeException extends RuntimeException {
     private static final long serialVersionUID = 880439356099888359L;

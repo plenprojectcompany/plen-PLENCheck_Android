@@ -1,4 +1,4 @@
-package jp.plen.plencheck.plencheck.utils;
+package jp.plen.plencheck.utils;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
@@ -8,9 +8,9 @@ import android.support.annotation.NonNull;
 
 import com.eccyan.optional.Optional;
 
-import jp.plen.plencheck.plencheck.exceptions.BluetoothUnavailableException;
-import jp.plen.plencheck.plencheck.exceptions.LocationUnavailableException;
-import jp.plen.plencheck.plencheck.exceptions.PlenConnectionException;
+import jp.plen.plencheck.exceptions.BluetoothUnavailableException;
+import jp.plen.plencheck.exceptions.LocationUnavailableException;
+import jp.plen.plencheck.exceptions.PlenConnectionException;
 
 public final class BluetoothUtil {
     private static final String TAG = BluetoothUtil.class.getSimpleName();

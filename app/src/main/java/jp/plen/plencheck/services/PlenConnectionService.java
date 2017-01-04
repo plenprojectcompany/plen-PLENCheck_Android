@@ -1,4 +1,4 @@
-package jp.plen.plencheck.plencheck.services;
+package jp.plen.plencheck.services;
 
 import android.app.Service;
 import android.bluetooth.BluetoothGatt;
@@ -23,13 +23,13 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import de.greenrobot.event.EventBus;
-import jp.plen.plencheck.rx.binding.Property;
+import jp.plen.rx.binding.Property;
 import jp.plen.plencheck.R;
-import jp.plen.plencheck.plencheck.exceptions.PlenConnectionException;
-import jp.plen.plencheck.plencheck.exceptions.ScenographyException;
-import jp.plen.plencheck.plencheck.utils.BluetoothUtil;
-import jp.plen.plencheck.plencheck.utils.PlenGattConstants;
-import jp.plen.plencheck.plencheck.utils.WatchDogTimer;
+import jp.plen.plencheck.exceptions.PlenConnectionException;
+import jp.plen.plencheck.exceptions.ScenographyException;
+import jp.plen.plencheck.utils.BluetoothUtil;
+import jp.plen.plencheck.utils.PlenGattConstants;
+import jp.plen.plencheck.utils.WatchDogTimer;
 import rx.Observable;
 import rx.schedulers.Schedulers;
 import rx.subjects.PublishSubject;

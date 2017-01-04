@@ -1,4 +1,4 @@
-package jp.plen.plencheck.rx.binding;
+package jp.plen.rx.binding;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;

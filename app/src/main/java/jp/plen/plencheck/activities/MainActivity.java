@@ -1,4 +1,4 @@
-package jp.plen.plencheck;
+package jp.plen.plencheck.activities;
 
 import android.content.ComponentName;
 import android.content.Intent;
@@ -24,9 +24,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.androidannotations.annotations.EActivity;
 
+import jp.plen.plencheck.R;
 import jp.plen.plencheck.ble.BLEDevice;
-import jp.plen.plencheck.plencheck.services.PlenConnectionService_;
-import jp.plen.plencheck.plencheck.services.PlenScanService_;
+import jp.plen.plencheck.services.PlenConnectionService_;
+import jp.plen.plencheck.services.PlenScanService_;
 
 @EActivity(R.layout.activity_main)
 public class MainActivity extends ActionBarActivity implements BLEDevice.BLECallbacks {

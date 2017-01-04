@@ -1,4 +1,4 @@
-package jp.plen.plencheck.plencheck.utils;
+package jp.plen.plencheck.utils;
 
 import android.bluetooth.le.ScanFilter;
 import android.os.ParcelUuid;

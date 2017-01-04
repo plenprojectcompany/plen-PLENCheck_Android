@@ -1,4 +1,4 @@
-package jp.plen.plencheck.plencheck.exceptions;
+package jp.plen.plencheck.exceptions;
 
 public class LocationUnavailableException extends ScenographyException {
     public LocationUnavailableException() {
