@@ -11,9 +11,8 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -37,6 +36,7 @@ import jp.plen.plencheck.R;
 import jp.plen.plencheck.fragments.dialog.LocationSettingRequestDialogFragment;
 import jp.plen.plencheck.fragments.dialog.LocationSettingRequestDialogFragment_;
 import jp.plen.plencheck.fragments.dialog.OpenSourceLicensesDialogFragment;
+import jp.plen.plencheck.fragments.dialog.OpenSourceLicensesDialogFragment_;
 import jp.plen.plencheck.fragments.dialog.PlenScanningDialogFragment;
 import jp.plen.plencheck.fragments.dialog.PlenScanningDialogFragment_;
 import jp.plen.plencheck.fragments.dialog.SelectPlenDialogFragment;
@@ -82,6 +82,7 @@ public class MainActivity extends Activity implements IMainActivity {
     @Pref MainPreferences_ mPref;
     private final CompositeSubscription mSubscriptions = new CompositeSubscription();
     @Bean PlenConnectionActivityPresenter mPresenter;
+    Toolbar mToolbar;
 
     private int map[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 13, 14, 15, 16, 17, 18, 19, 20};
     private int default_position[] = {
@@ -138,6 +139,7 @@ public class MainActivity extends Activity implements IMainActivity {
         final SeekBar vs = (SeekBar) findViewById(R.id.seekBar);
         final TextView tv = (TextView) findViewById(R.id.textView);
         final ImageView iv = (ImageView) findViewById(R.id.plen);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
         vs.setProgress(default_position[0]+900);
         tv.setText(String.valueOf(vs.getProgress() ));
@@ -145,6 +147,8 @@ public class MainActivity extends Activity implements IMainActivity {
         // 通信用Service起動
         bindService(new Intent(this, PlenConnectionService_.class), mPlenConnectionService, BIND_AUTO_CREATE);
         bindService(new Intent(this, PlenScanService_.class), mPlenScanService, BIND_AUTO_CREATE);
+
+        updateToolbar();
 
         iv.setOnTouchListener(
                 new View.OnTouchListener() {
@@ -262,28 +266,6 @@ public class MainActivity extends Activity implements IMainActivity {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     /*
@@ -457,12 +439,12 @@ public class MainActivity extends Activity implements IMainActivity {
                 Toast.makeText(this, R.string.plen_disconnected, Toast.LENGTH_SHORT).show();
             }
         }
-        // updateToolbar();
+        updateToolbar();
     }
 
     @Override
     public void notifyWriteTxDataCompleted() {
-        // updateToolbar();
+        updateToolbar();
     }
 
     @Override
@@ -478,5 +460,26 @@ public class MainActivity extends Activity implements IMainActivity {
                 .map(f -> (DialogFragment) f)
                 .filter(DialogFragment::getShowsDialog)
                 .ifPresent(f -> f.onDismiss(f.getDialog()));
+    }
+
+    @UiThread
+    void updateToolbar() {
+        mToolbar.setTitle(R.string.app_name);
+
+        mToolbar.getMenu().clear();
+        mToolbar.inflateMenu(R.menu.menu_main);
+
+
+        mToolbar.setOnMenuItemClickListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.action_search_plen) {
+                mPresenter.disconnectPlen();
+                mPresenter.startScan();
+            }else if (id == R.id.action_licenses) {
+                mFragmentManager.ifPresent(m -> OpenSourceLicensesDialogFragment_.builder().build()
+                        .show(m, OSS_LICENSES_DIALOG));
+            }
+            return true;
+        });
     }
 }
