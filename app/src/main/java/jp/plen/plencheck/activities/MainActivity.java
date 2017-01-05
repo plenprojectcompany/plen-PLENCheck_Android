@@ -1,12 +1,16 @@
 package jp.plen.plencheck.activities;
 
+import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.FragmentManager;
+import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v7.app.ActionBarActivity;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,23 +22,42 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.appindexing.Action;
+import com.eccyan.optional.Optional;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.UiThread;
+import org.androidannotations.annotations.sharedpreferences.Pref;
+
+import java.util.List;
 
 import jp.plen.plencheck.R;
-import jp.plen.plencheck.ble.BLEDevice;
+import jp.plen.plencheck.fragments.dialog.LocationSettingRequestDialogFragment;
+import jp.plen.plencheck.fragments.dialog.LocationSettingRequestDialogFragment_;
+import jp.plen.plencheck.fragments.dialog.OpenSourceLicensesDialogFragment;
+import jp.plen.plencheck.fragments.dialog.PlenScanningDialogFragment;
+import jp.plen.plencheck.fragments.dialog.PlenScanningDialogFragment_;
+import jp.plen.plencheck.fragments.dialog.SelectPlenDialogFragment;
+import jp.plen.plencheck.fragments.dialog.SelectPlenDialogFragment_;
+import jp.plen.plencheck.models.preferences.MainPreferences_;
 import jp.plen.plencheck.services.PlenConnectionService_;
 import jp.plen.plencheck.services.PlenScanService_;
+import jp.plen.rx.utils.Operators;
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
 @EActivity
-public class MainActivity extends ActionBarActivity implements BLEDevice.BLECallbacks {
+public class MainActivity extends Activity implements IMainActivity {
     private String TAG = "MainActivity";
+    private static final String SCANNING_DIALOG = PlenScanningDialogFragment.class.getSimpleName();
+    private static final String SELECT_PLEN_DIALOG = SelectPlenDialogFragment.class.getSimpleName();
+    private static final String OSS_LICENSES_DIALOG = OpenSourceLicensesDialogFragment.class.getSimpleName();
+    private static final String LOCATION_SETTING_DIALOG = LocationSettingRequestDialogFragment.class.getSimpleName();
     private boolean isClearChecked = false;
     private int checkedNum = 0;
-    private BLEDevice bleDevice;
+    // private BLEDevice bleDevice;
 
     private final ServiceConnection mPlenConnectionService = new ServiceConnection() {
         @Override
@@ -54,6 +77,11 @@ public class MainActivity extends ActionBarActivity implements BLEDevice.BLECall
         public void onServiceDisconnected(ComponentName name) {
         }
     };
+
+    @NonNull private Optional<FragmentManager> mFragmentManager = Optional.empty();
+    @Pref MainPreferences_ mPref;
+    private final CompositeSubscription mSubscriptions = new CompositeSubscription();
+    @Bean PlenConnectionActivityPresenter mPresenter;
 
     private int map[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 13, 14, 15, 16, 17, 18, 19, 20};
     private int default_position[] = {
@@ -134,7 +162,7 @@ public class MainActivity extends ActionBarActivity implements BLEDevice.BLECall
                                 String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
                                 default_position[checkedNum] = vs.getProgress() -900;
                                 Log.d(TAG, "$an" + hexNum + deg);
-                                bleDevice.write("$an" + hexNum + deg);
+                                // bleDevice.write("$an" + hexNum + deg);
                                 break;
                         }
                         return false;
@@ -156,7 +184,7 @@ public class MainActivity extends ActionBarActivity implements BLEDevice.BLECall
                         String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
                         default_position[i - 1] = vs.getProgress() -900;
                         Log.d(TAG, "$an" + hexNum + deg);
-                        bleDevice.write("$an" + hexNum + deg);
+                        //bleDevice.write("$an" + hexNum + deg);
                     }
 
                     @Override
@@ -174,7 +202,7 @@ public class MainActivity extends ActionBarActivity implements BLEDevice.BLECall
                         String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
                         default_position[i - 1] = vs.getProgress() -900;
                         Log.d(TAG, "$an" + hexNum + deg);
-                        bleDevice.write("$an" + hexNum + deg);
+                        //bleDevice.write("$an" + hexNum + deg);
                     }
                 }
         );
@@ -195,7 +223,7 @@ public class MainActivity extends ActionBarActivity implements BLEDevice.BLECall
                         String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
                         default_position[i - 1] = vs.getProgress() -900;
                         Log.d(TAG, "$an" + hexNum + deg);
-                        bleDevice.write("$an" + hexNum + deg);
+                        // bleDevice.write("$an" + hexNum + deg);
                     }
                 }
         );
@@ -213,7 +241,7 @@ public class MainActivity extends ActionBarActivity implements BLEDevice.BLECall
                         String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
                         default_position[i - 1] = vs.getProgress() -900;
                         Log.d(TAG, "$an" + hexNum + deg);
-                        bleDevice.write("$an" + hexNum + deg);
+                        // bleDevice.write("$an" + hexNum + deg);
                     }
                 }
         );
@@ -228,7 +256,7 @@ public class MainActivity extends ActionBarActivity implements BLEDevice.BLECall
                 String hexNum = String.format("%02x", value);
                 String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
                 Log.d(TAG, ">ho" + hexNum + deg);
-                bleDevice.write(">ho" + hexNum + deg);
+                // bleDevice.write(">ho" + hexNum + deg);
             }
         });
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -258,11 +286,14 @@ public class MainActivity extends ActionBarActivity implements BLEDevice.BLECall
         return super.onOptionsItemSelected(item);
     }
 
+    /*
     @Override
     public void onConnected(String deviceName) {
         Toast.makeText(this, "Connected " + deviceName, Toast.LENGTH_SHORT).show();
     }
+    */
 
+    /*
     @Override
     public void onStart() {
         super.onStart();
@@ -301,5 +332,151 @@ public class MainActivity extends ActionBarActivity implements BLEDevice.BLECall
         );
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
+    }
+    */
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume ");
+        mFragmentManager = Optional.ofNullable(getFragmentManager());
+        dismissDialogFragment(SCANNING_DIALOG);
+        mFragmentManager
+                .map(fm -> (SelectPlenDialogFragment) fm.findFragmentByTag(SELECT_PLEN_DIALOG))
+                .map(SelectPlenDialogFragment::getAddresses) // .map(f -> f.getAddress())
+                .ifPresent(this::notifyPlenScanComplete);
+        mFragmentManager
+                .map(fm -> fm.findFragmentByTag(LOCATION_SETTING_DIALOG))
+                .ifPresent(fm -> notifyLocationUnavailable());
+        mPresenter.bind(this);
+    }
+
+    @Override
+    public void onPause() {
+        Log.d(TAG, "onPause ");
+        mFragmentManager = Optional.empty();
+        mPresenter.unbind();
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "onDestroy");
+        mSubscriptions.unsubscribe();
+        unbindService(mPlenConnectionService);
+        unbindService(mPlenScanService);
+        super.onDestroy();
+    }
+
+    @Override
+    public void notifyBluetoothUnavailable() {
+        Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        int requestCode = 1;
+        startActivityForResult(intent, requestCode);
+    }
+
+    @Override
+    public void notifyLocationUnavailable() {
+        CompositeSubscription subscriptions = new CompositeSubscription();
+        LocationSettingRequestDialogFragment fragment = LocationSettingRequestDialogFragment_.builder()
+                .build();
+        fragment.allowEvent()
+                .lift(Operators.composite(subscriptions))
+                .subscribe(v -> {
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    int requestCode = 1;
+                    startActivityForResult(intent, requestCode);
+                });
+        mFragmentManager.ifPresent(m -> fragment.show(m, LOCATION_SETTING_DIALOG));
+        mSubscriptions.add(subscriptions);
+    }
+
+    @Override
+    public void notifyPlenScanning() {
+        dismissDialogFragment(SCANNING_DIALOG);
+
+        PlenScanningDialogFragment fragment = PlenScanningDialogFragment_.builder().build();
+        Subscription subscription = fragment.cancelEvent().subscribe(v -> mPresenter.cancelScan());
+        mFragmentManager.ifPresent(fm -> fragment.show(fm, SCANNING_DIALOG));
+        mSubscriptions.add(subscription);
+    }
+
+    @Override
+    public void notifyPlenScanCancel() {
+        dismissDialogFragment(SCANNING_DIALOG);
+    }
+
+    @Override
+    public void notifyPlenScanComplete(@NonNull List<String> addresses) {
+        dismissDialogFragment(SCANNING_DIALOG);
+        dismissDialogFragment(SELECT_PLEN_DIALOG);
+
+        String defaultAddress = mPref.defaultPlenAddress().get();
+        CompositeSubscription subscriptions = new CompositeSubscription();
+
+        SelectPlenDialogFragment fragment = SelectPlenDialogFragment_.builder()
+                .addresses(addresses.toArray(new String[addresses.size()]))
+                .defaultAddress(defaultAddress)
+                .build();
+
+        fragment.onDeviceSelectEvent()
+                .lift(Operators.composite(subscriptions))
+                .subscribe(i -> mPref.edit()
+                        .defaultPlenAddress().put(addresses.get(i))
+                        .apply());
+
+        fragment.cancelEvent()
+                .lift(Operators.composite(subscriptions))
+                .subscribe(v -> mPref.edit()
+                        .defaultPlenAddress().put(defaultAddress)
+                        .apply());
+
+        fragment.okEvent()
+                .lift(Operators.composite(subscriptions))
+                .subscribe(v -> Optional
+                        .ofNullable(mPref.defaultPlenAddress().get())
+                        .filter(address -> !address.isEmpty())
+                        .ifPresent(mPresenter::connectPlen));
+
+        fragment.rescanEvent()
+                .lift(Operators.composite(subscriptions))
+                .subscribe(v -> mPresenter.startScan());
+
+        mFragmentManager.ifPresent(m -> fragment.show(m, SELECT_PLEN_DIALOG));
+
+        mSubscriptions.add(subscriptions);
+    }
+
+    @UiThread
+    @Override
+    public void notifyPlenConnectionChanged(boolean connected, boolean now) {
+        if (now) {
+            if (connected) {
+                Toast.makeText(this, R.string.plen_connected, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, R.string.plen_disconnected, Toast.LENGTH_SHORT).show();
+            }
+        }
+        // updateToolbar();
+    }
+
+    @Override
+    public void notifyWriteTxDataCompleted() {
+        // updateToolbar();
+    }
+
+    @Override
+    public void notifyConnectionError(@NonNull Throwable e) {
+        Toast.makeText(this, R.string.connection_error, Toast.LENGTH_SHORT).show();
+        Log.e(TAG, "onConnectionError ", e);
+    }
+
+    @UiThread
+    void dismissDialogFragment(@NonNull String tag) {
+        mFragmentManager.map(fm -> fm.findFragmentByTag(tag))
+                .filter(f -> f instanceof DialogFragment)
+                .map(f -> (DialogFragment) f)
+                .filter(DialogFragment::getShowsDialog)
+                .ifPresent(f -> f.onDismiss(f.getDialog()));
     }
 }
