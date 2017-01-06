@@ -14,7 +14,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -152,27 +151,24 @@ public class MainActivity extends Activity implements IMainActivity {
         updateToolbar();
 
         iv.setOnTouchListener(
-                new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        switch(event.getAction()){
-                            case MotionEvent.ACTION_DOWN:
-                                Log.d(TAG, String.valueOf(convertToJointNum(event.getX() / iv.getWidth(), event.getY() / iv.getHeight())));
-                                checkedNum = convertToJointNum(event.getX() / iv.getWidth(), event.getY() / iv.getHeight());
+                (v, event) -> {
+                    switch(event.getAction()){
+                        case MotionEvent.ACTION_DOWN:
+                            Log.d(TAG, String.valueOf(convertToJointNum(event.getX() / iv.getWidth(), event.getY() / iv.getHeight())));
+                            checkedNum = convertToJointNum(event.getX() / iv.getWidth(), event.getY() / iv.getHeight());
 
-                                int value = map[checkedNum];
-                                vs.setProgress(default_position[checkedNum]+900);
-                                tv.setText(String.valueOf(vs.getProgress() -900));
-                                String hexNum = String.format("%02x", value);
-                                String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
-                                default_position[checkedNum] = vs.getProgress() -900;
-                                String program = "$an" + hexNum + deg;
-                                Log.d(TAG, "$an" + hexNum + deg);
-                                EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
-                                break;
-                        }
-                        return false;
-                  }
+                            int value = map[checkedNum];
+                            vs.setProgress(default_position[checkedNum]+900);
+                            tv.setText(String.valueOf(vs.getProgress() -900));
+                            String hexNum = String.format("%02x", value);
+                            String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
+                            default_position[checkedNum] = vs.getProgress() -900;
+                            String program = "$an" + hexNum + deg;
+                            Log.d(TAG, "$an" + hexNum + deg);
+                            EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
+                            break;
+                    }
+                    return false;
               }
         );
 
@@ -217,56 +213,47 @@ public class MainActivity extends Activity implements IMainActivity {
         final Button dup = (Button) findViewById(R.id.buttondown);
 
         bup.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        vs.setProgress(vs.getProgress() + 1);
-                        tv.setText(String.valueOf(vs.getProgress() -900 ));
-                        //int i = Integer.parseInt(((RadioButton)findViewById(checkedNum)).getText().toString());
-                        int i = checkedNum+1;
-                        int value = map[i - 1];
-                        String hexNum = String.format("%02x", value);
-                        String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
-                        default_position[i - 1] = vs.getProgress() -900;
-                        String program = "$an" + hexNum + deg;
-                        Log.d(TAG, "$an" + hexNum + deg);
-                        EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
-                    }
+                v -> {
+                    vs.setProgress(vs.getProgress() + 1);
+                    tv.setText(String.valueOf(vs.getProgress() -900 ));
+                    //int i = Integer.parseInt(((RadioButton)findViewById(checkedNum)).getText().toString());
+                    int i = checkedNum+1;
+                    int value = map[i - 1];
+                    String hexNum = String.format("%02x", value);
+                    String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
+                    default_position[i - 1] = vs.getProgress() -900;
+                    String program = "$an" + hexNum + deg;
+                    Log.d(TAG, "$an" + hexNum + deg);
+                    EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
                 }
         );
 
         dup.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        vs.setProgress(vs.getProgress() - 1);
-                        tv.setText(String.valueOf(vs.getProgress() -900 ));
-                        //int i = Integer.parseInt(((RadioButton)findViewById(checkedNum)).getText().toString());
-                        int i = checkedNum+1;
-                        int value = map[i - 1];
-                        String hexNum = String.format("%02x", value);
-                        String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
-                        default_position[i - 1] = vs.getProgress() -900;
-                        String program = "$an" + hexNum + deg;
-                        Log.d(TAG, "$an" + hexNum + deg);
-                        EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
-                    }
+                v -> {
+                    vs.setProgress(vs.getProgress() - 1);
+                    tv.setText(String.valueOf(vs.getProgress() -900 ));
+                    //int i = Integer.parseInt(((RadioButton)findViewById(checkedNum)).getText().toString());
+                    int i = checkedNum+1;
+                    int value = map[i - 1];
+                    String hexNum = String.format("%02x", value);
+                    String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
+                    default_position[i - 1] = vs.getProgress() -900;
+                    String program = "$an" + hexNum + deg;
+                    Log.d(TAG, "$an" + hexNum + deg);
+                    EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
                 }
         );
 
         Button homeButton = (Button) findViewById(R.id.button);
-        homeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //int i = Integer.parseInt(((RadioButton)findViewById(checkedNum)).getText().toString());
-                int i = checkedNum + 1;
-                int value = map[i - 1];
-                String hexNum = String.format("%02x", value);
-                String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
-                String program = "$an" + hexNum + deg;
-                Log.d(TAG, "$an" + hexNum + deg);
-                EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
-            }
+        homeButton.setOnClickListener(v -> {
+            //int i = Integer.parseInt(((RadioButton)findViewById(checkedNum)).getText().toString());
+            int i = checkedNum + 1;
+            int value = map[i - 1];
+            String hexNum = String.format("%02x", value);
+            String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
+            String program = "$an" + hexNum + deg;
+            Log.d(TAG, "$an" + hexNum + deg);
+            EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
         });
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
