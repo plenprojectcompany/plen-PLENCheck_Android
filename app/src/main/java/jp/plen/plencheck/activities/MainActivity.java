@@ -32,6 +32,7 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
 import jp.plen.plencheck.R;
 import jp.plen.plencheck.fragments.dialog.LocationSettingRequestDialogFragment;
 import jp.plen.plencheck.fragments.dialog.LocationSettingRequestDialogFragment_;
@@ -42,6 +43,7 @@ import jp.plen.plencheck.fragments.dialog.PlenScanningDialogFragment_;
 import jp.plen.plencheck.fragments.dialog.SelectPlenDialogFragment;
 import jp.plen.plencheck.fragments.dialog.SelectPlenDialogFragment_;
 import jp.plen.plencheck.models.preferences.MainPreferences_;
+import jp.plen.plencheck.services.PlenConnectionService;
 import jp.plen.plencheck.services.PlenConnectionService_;
 import jp.plen.plencheck.services.PlenScanService_;
 import jp.plen.rx.utils.Operators;
@@ -57,7 +59,6 @@ public class MainActivity extends Activity implements IMainActivity {
     private static final String LOCATION_SETTING_DIALOG = LocationSettingRequestDialogFragment.class.getSimpleName();
     private boolean isClearChecked = false;
     private int checkedNum = 0;
-    // private BLEDevice bleDevice;
 
     private final ServiceConnection mPlenConnectionService = new ServiceConnection() {
         @Override
@@ -165,8 +166,9 @@ public class MainActivity extends Activity implements IMainActivity {
                                 String hexNum = String.format("%02x", value);
                                 String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
                                 default_position[checkedNum] = vs.getProgress() -900;
+                                String program = "$an" + hexNum + deg;
                                 Log.d(TAG, "$an" + hexNum + deg);
-                                // bleDevice.write("$an" + hexNum + deg);
+                                EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
                                 break;
                         }
                         return false;
@@ -180,15 +182,14 @@ public class MainActivity extends Activity implements IMainActivity {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         tv.setText(String.valueOf(vs.getProgress() -900 ));
-                        // now debuging
-                        //int i = Integer.parseInt(((RadioButton)findViewById(checkedNum)).getText().toString());
                         int i = checkedNum+1;
                         int value = map[i - 1];
                         String hexNum = String.format("%02x", value);
                         String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
                         default_position[i - 1] = vs.getProgress() -900;
+                        String program = "$an" + hexNum + deg;
                         Log.d(TAG, "$an" + hexNum + deg);
-                        //bleDevice.write("$an" + hexNum + deg);
+                        EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
                     }
 
                     @Override
@@ -205,8 +206,9 @@ public class MainActivity extends Activity implements IMainActivity {
                         String hexNum = String.format("%02x", value);
                         String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
                         default_position[i - 1] = vs.getProgress() -900;
+                        String program = "$an" + hexNum + deg;
                         Log.d(TAG, "$an" + hexNum + deg);
-                        //bleDevice.write("$an" + hexNum + deg);
+                        EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
                     }
                 }
         );
@@ -226,8 +228,9 @@ public class MainActivity extends Activity implements IMainActivity {
                         String hexNum = String.format("%02x", value);
                         String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
                         default_position[i - 1] = vs.getProgress() -900;
+                        String program = "$an" + hexNum + deg;
                         Log.d(TAG, "$an" + hexNum + deg);
-                        // bleDevice.write("$an" + hexNum + deg);
+                        EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
                     }
                 }
         );
@@ -244,8 +247,9 @@ public class MainActivity extends Activity implements IMainActivity {
                         String hexNum = String.format("%02x", value);
                         String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
                         default_position[i - 1] = vs.getProgress() -900;
+                        String program = "$an" + hexNum + deg;
                         Log.d(TAG, "$an" + hexNum + deg);
-                        // bleDevice.write("$an" + hexNum + deg);
+                        EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
                     }
                 }
         );
@@ -259,63 +263,15 @@ public class MainActivity extends Activity implements IMainActivity {
                 int value = map[i - 1];
                 String hexNum = String.format("%02x", value);
                 String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
-                Log.d(TAG, ">ho" + hexNum + deg);
-                // bleDevice.write(">ho" + hexNum + deg);
+                String program = "$an" + hexNum + deg;
+                Log.d(TAG, "$an" + hexNum + deg);
+                EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
             }
         });
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
-
-    /*
-    @Override
-    public void onConnected(String deviceName) {
-        Toast.makeText(this, "Connected " + deviceName, Toast.LENGTH_SHORT).show();
-    }
-    */
-
-    /*
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Main Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://jp.plen.plencheck/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Main Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://jp.plen.plencheck/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
-    }
-    */
 
     @Override
     public void onResume() {
