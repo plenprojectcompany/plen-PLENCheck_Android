@@ -23,6 +23,8 @@ import android.widget.Toast;
 import com.eccyan.optional.Optional;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.jakewharton.rxbinding.widget.RxSeekBar;
+import com.jakewharton.rxbinding.widget.SeekBarProgressChangeEvent;
 
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
@@ -30,6 +32,7 @@ import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import de.greenrobot.event.EventBus;
 import jp.plen.plencheck.R;
@@ -47,6 +50,7 @@ import jp.plen.plencheck.services.PlenConnectionService_;
 import jp.plen.plencheck.services.PlenScanService_;
 import jp.plen.rx.utils.Operators;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
 
 @EActivity
@@ -141,73 +145,63 @@ public class MainActivity extends Activity implements IMainActivity {
         final ImageView iv = (ImageView) findViewById(R.id.plen);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        vs.setProgress(default_position[0]+900);
-        tv.setText(String.valueOf(vs.getProgress() ));
+        vs.setProgress(default_position[0] + 900);
+        tv.setText(String.valueOf(vs.getProgress()));
 
         // 通信用Service起動
         bindService(new Intent(this, PlenConnectionService_.class), mPlenConnectionService, BIND_AUTO_CREATE);
         bindService(new Intent(this, PlenScanService_.class), mPlenScanService, BIND_AUTO_CREATE);
 
+
+        mSubscriptions.add(
+                RxSeekBar.changeEvents(vs)
+                        .ofType(SeekBarProgressChangeEvent.class)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnNext(seekBarChangeEvent ->{
+                            int progress = seekBarChangeEvent.progress();
+                            tv.setText(String.valueOf(progress-900));
+                            default_position[checkedNum] = vs.getProgress() - 900;
+                            Log.d(TAG, "changeEvent");
+                        })
+                        .throttleFirst(100, TimeUnit.MILLISECONDS)
+                        .subscribe(seekBarChangeEvent -> {
+                            int progress = seekBarChangeEvent.progress();
+
+                            int value = map[checkedNum];
+                            String hexNum = String.format("%02x", value);
+                            String deg = String.format("%03x", (progress - 900) & 0xFFF);
+                            default_position[checkedNum] = progress - 900;
+                            String program = "$an" + hexNum + deg;
+                            Log.d(TAG, program);
+                            // EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
+                        })
+        );
+
+
         updateToolbar();
 
         iv.setOnTouchListener(
                 (v, event) -> {
-                    switch(event.getAction()){
+                    switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             Log.d(TAG, String.valueOf(convertToJointNum(event.getX() / iv.getWidth(), event.getY() / iv.getHeight())));
                             checkedNum = convertToJointNum(event.getX() / iv.getWidth(), event.getY() / iv.getHeight());
 
                             int value = map[checkedNum];
-                            vs.setProgress(default_position[checkedNum]+900);
-                            tv.setText(String.valueOf(vs.getProgress() -900));
+                            vs.setProgress(default_position[checkedNum] + 900);
+                            tv.setText(String.valueOf(vs.getProgress() - 900));
                             String hexNum = String.format("%02x", value);
-                            String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
-                            default_position[checkedNum] = vs.getProgress() -900;
+                            String deg = String.format("%03x", (vs.getProgress() - 900) & 0xFFF);
+                            default_position[checkedNum] = vs.getProgress() - 900;
                             String program = "$an" + hexNum + deg;
                             Log.d(TAG, "$an" + hexNum + deg);
                             EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
                             break;
                     }
                     return false;
-              }
-        );
-
-
-        vs.setOnSeekBarChangeListener(
-                new SeekBar.OnSeekBarChangeListener() {
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        tv.setText(String.valueOf(vs.getProgress() -900 ));
-                        int i = checkedNum+1;
-                        int value = map[i - 1];
-                        String hexNum = String.format("%02x", value);
-                        String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
-                        default_position[i - 1] = vs.getProgress() -900;
-                        String program = "$an" + hexNum + deg;
-                        Log.d(TAG, "$an" + hexNum + deg);
-                        EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
-                    }
-
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-
-                    }
-
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-                        tv.setText(String.valueOf(vs.getProgress() -900 ));
-                        //int i = Integer.parseInt(((RadioButton)findViewById(checkedNum)).getText().toString());
-                        int i = checkedNum+1;
-                        int value = map[i - 1];
-                        String hexNum = String.format("%02x", value);
-                        String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
-                        default_position[i - 1] = vs.getProgress() -900;
-                        String program = "$an" + hexNum + deg;
-                        Log.d(TAG, "$an" + hexNum + deg);
-                        EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
-                    }
                 }
         );
+
 
         final Button bup = (Button) findViewById(R.id.buttonup);
         final Button dup = (Button) findViewById(R.id.buttondown);
@@ -412,13 +406,12 @@ public class MainActivity extends Activity implements IMainActivity {
         mToolbar.getMenu().clear();
         mToolbar.inflateMenu(R.menu.menu_main);
 
-
         mToolbar.setOnMenuItemClickListener(item -> {
             int id = item.getItemId();
             if (id == R.id.action_search_plen) {
                 mPresenter.disconnectPlen();
                 mPresenter.startScan();
-            }else if (id == R.id.action_licenses) {
+            } else if (id == R.id.action_licenses) {
                 mFragmentManager.ifPresent(m -> OpenSourceLicensesDialogFragment_.builder().build()
                         .show(m, OSS_LICENSES_DIALOG));
             }
