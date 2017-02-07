@@ -68,4 +68,7 @@
     <string name="log_ble_writing_failed">Writing to the TxData characteristic failed.</string>
     <string name="log_plen_connection_service_initialized">PlenConnectionService initialized</string>
     <string name="image_plen">Plen2</string>
+
+    <!-- ToolBar -->
+    <string name="toolbar_text">selected joint : %d</string>
 </resources>

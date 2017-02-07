@@ -156,6 +156,7 @@ public class MainActivity extends Activity implements IMainActivity {
         bindService(new Intent(this, PlenScanService_.class), mPlenScanService, BIND_AUTO_CREATE);
 
 
+        // SeekBarの変更イベント管理
         mSubscriptions.add(
                 RxSeekBar.changeEvents(vs)
                         .ofType(SeekBarProgressChangeEvent.class)
@@ -192,6 +193,8 @@ public class MainActivity extends Activity implements IMainActivity {
                             Log.d(TAG, String.valueOf(convertToJointNum(event.getX() / iv.getWidth(), event.getY() / iv.getHeight())));
                             checkedNum = convertToJointNum(event.getX() / iv.getWidth(), event.getY() / iv.getHeight());
                             vs.setProgress(default_position[checkedNum] + 900);
+
+                            updateToolbar();
                             break;
                     }
                     return false;
@@ -353,8 +356,8 @@ public class MainActivity extends Activity implements IMainActivity {
 
     @UiThread
     void updateToolbar() {
-        mToolbar.setTitle(R.string.app_name);
-
+        // mToolbar.setTitle(R.string.app_name);
+        mToolbar.setTitle(getString(R.string.toolbar_text, map[checkedNum]));
         mToolbar.getMenu().clear();
         mToolbar.inflateMenu(R.menu.menu_main);
 
