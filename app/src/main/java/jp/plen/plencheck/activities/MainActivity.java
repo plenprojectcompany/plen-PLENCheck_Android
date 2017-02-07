@@ -143,6 +143,9 @@ public class MainActivity extends Activity implements IMainActivity {
         final SeekBar vs = (SeekBar) findViewById(R.id.seekBar);
         final TextView tv = (TextView) findViewById(R.id.textView);
         final ImageView iv = (ImageView) findViewById(R.id.plen);
+        final Button bup = (Button) findViewById(R.id.buttonup);
+        final Button dup = (Button) findViewById(R.id.buttondown);
+        final Button homeButton = (Button) findViewById(R.id.button);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
         vs.setProgress(default_position[0] + 900);
@@ -157,28 +160,30 @@ public class MainActivity extends Activity implements IMainActivity {
                 RxSeekBar.changeEvents(vs)
                         .ofType(SeekBarProgressChangeEvent.class)
                         .observeOn(AndroidSchedulers.mainThread())
-                        .doOnNext(seekBarChangeEvent ->{
+                        .doOnNext(seekBarChangeEvent -> {
                             int progress = seekBarChangeEvent.progress();
-                            tv.setText(String.valueOf(progress-900));
-                            default_position[checkedNum] = vs.getProgress() - 900;
+                            tv.setText(String.valueOf(progress - 900));
+                            default_position[checkedNum] = progress - 900;
                             Log.d(TAG, "changeEvent");
                         })
                         .throttleFirst(100, TimeUnit.MILLISECONDS)
                         .subscribe(seekBarChangeEvent -> {
                             int progress = seekBarChangeEvent.progress();
-
                             int value = map[checkedNum];
                             String hexNum = String.format("%02x", value);
                             String deg = String.format("%03x", (progress - 900) & 0xFFF);
                             default_position[checkedNum] = progress - 900;
                             String program = "$an" + hexNum + deg;
                             Log.d(TAG, program);
-                            // EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
+                            EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
                         })
         );
 
-
         updateToolbar();
+
+        bup.setOnTouchListener(new RepeatListner(400, 50, v -> vs.setProgress(vs.getProgress() + 1)));
+
+        dup.setOnTouchListener(new RepeatListner(400, 50, v -> vs.setProgress(vs.getProgress() - 1)));
 
         iv.setOnTouchListener(
                 (v, event) -> {
@@ -186,69 +191,16 @@ public class MainActivity extends Activity implements IMainActivity {
                         case MotionEvent.ACTION_DOWN:
                             Log.d(TAG, String.valueOf(convertToJointNum(event.getX() / iv.getWidth(), event.getY() / iv.getHeight())));
                             checkedNum = convertToJointNum(event.getX() / iv.getWidth(), event.getY() / iv.getHeight());
-
-                            int value = map[checkedNum];
                             vs.setProgress(default_position[checkedNum] + 900);
-                            tv.setText(String.valueOf(vs.getProgress() - 900));
-                            String hexNum = String.format("%02x", value);
-                            String deg = String.format("%03x", (vs.getProgress() - 900) & 0xFFF);
-                            default_position[checkedNum] = vs.getProgress() - 900;
-                            String program = "$an" + hexNum + deg;
-                            Log.d(TAG, "$an" + hexNum + deg);
-                            EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
                             break;
                     }
                     return false;
                 }
         );
-
-
-        final Button bup = (Button) findViewById(R.id.buttonup);
-        final Button dup = (Button) findViewById(R.id.buttondown);
-
-        bup.setOnClickListener(
-                v -> {
-                    vs.setProgress(vs.getProgress() + 1);
-                    tv.setText(String.valueOf(vs.getProgress() -900 ));
-                    //int i = Integer.parseInt(((RadioButton)findViewById(checkedNum)).getText().toString());
-                    int i = checkedNum+1;
-                    int value = map[i - 1];
-                    String hexNum = String.format("%02x", value);
-                    String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
-                    default_position[i - 1] = vs.getProgress() -900;
-                    String program = "$an" + hexNum + deg;
-                    Log.d(TAG, "$an" + hexNum + deg);
-                    EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
-                }
-        );
-
-        dup.setOnClickListener(
-                v -> {
-                    vs.setProgress(vs.getProgress() - 1);
-                    tv.setText(String.valueOf(vs.getProgress() -900 ));
-                    //int i = Integer.parseInt(((RadioButton)findViewById(checkedNum)).getText().toString());
-                    int i = checkedNum+1;
-                    int value = map[i - 1];
-                    String hexNum = String.format("%02x", value);
-                    String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
-                    default_position[i - 1] = vs.getProgress() -900;
-                    String program = "$an" + hexNum + deg;
-                    Log.d(TAG, "$an" + hexNum + deg);
-                    EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
-                }
-        );
-
-        Button homeButton = (Button) findViewById(R.id.button);
+        
         homeButton.setOnClickListener(v -> {
-            //int i = Integer.parseInt(((RadioButton)findViewById(checkedNum)).getText().toString());
-            int i = checkedNum + 1;
-            int value = map[i - 1];
-            String hexNum = String.format("%02x", value);
-            String deg = String.format("%03x", (vs.getProgress() -900 ) & 0xFFF);
-            String program = "$an" + hexNum + deg;
-            Log.d(TAG, "$an" + hexNum + deg);
-            EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
         });
+
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
