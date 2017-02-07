@@ -20,7 +20,7 @@
         android:layout_weight="0.8"
         android:layout_width="match_parent"
         android:id="@+id/plen"
-        android:src="@drawable/plen"
+        android:src="@drawable/plen2"
         android:layout_gravity="center_horizontal"
         android:contentDescription="@string/image_plen" />
 
@@ -32,21 +32,11 @@
         android:text="Small Text"
         android:id="@+id/textView"
         android:layout_gravity="center_horizontal" />
-    <!--
-    <jp.plen.plencheck.HorizontalSeekbar
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.1"
-        android:progress="900"
-        android:max="1800"
-        android:id="@+id/horseek"
-        android:layout_gravity="center" />
-    -->
+
     <SeekBar
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:id="@+id/seekBar"
-        android:layout_weight="0.1"
         android:layout_gravity="center_horizontal"
         android:progress="900"
         android:max="1800"/>
@@ -56,7 +46,8 @@
         android:layout_weight="0.1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:gravity="center">
 
         <Button
             android:layout_width="100dp"
