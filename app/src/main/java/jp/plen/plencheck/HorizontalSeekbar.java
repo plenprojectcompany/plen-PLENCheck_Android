@@ -27,7 +27,7 @@ public class HorizontalSeekbar extends SeekBar{
     }
 
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        //Log.d(TAG, "w: " + String.valueOf(w) + " h:" + String.valueOf(h) + " oldw:" + String.valueOf(oldw) + " oldh:" + String.valueOf(oldh));
+        Log.d(TAG, "w: " + String.valueOf(w) + " h:" + String.valueOf(h) + " oldw:" + String.valueOf(oldw) + " oldh:" + String.valueOf(oldh));
         super.onSizeChanged(h, w, oldh, oldw);
     }
 

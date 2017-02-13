@@ -1,20 +1,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
-
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="@dimen/elevation_low"
+        android:theme="@style/OptionMenuTheme"
+        app:popupTheme="@style/OptionMenuPopupTheme"/>
 
     <ImageView
         android:layout_height="0dp"
         android:layout_weight="0.8"
         android:layout_width="match_parent"
         android:id="@+id/plen"
-        android:src="@drawable/plen"
+        android:src="@drawable/plen2"
         android:layout_gravity="center_horizontal"
-        android:contentDescription="Plen2" />
+        android:contentDescription="@string/image_plen" />
 
 
     <TextView
@@ -24,21 +32,11 @@
         android:text="Small Text"
         android:id="@+id/textView"
         android:layout_gravity="center_horizontal" />
-    <!--
-    <jp.plen.plencheck.HorizontalSeekbar
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.1"
-        android:progress="900"
-        android:max="1800"
-        android:id="@+id/horseek"
-        android:layout_gravity="center" />
-    -->
+
     <SeekBar
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:id="@+id/seekBar"
-        android:layout_weight="0.1"
         android:layout_gravity="center_horizontal"
         android:progress="900"
         android:max="1800"/>
@@ -48,7 +46,8 @@
         android:layout_weight="0.1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:gravity="center">
 
         <Button
             android:layout_width="100dp"
