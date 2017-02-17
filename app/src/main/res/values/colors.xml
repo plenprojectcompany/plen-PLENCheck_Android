@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">@color/plen_green</color>
+    <color name="primary_dark">@color/plen_green_dark</color>
+    <color name="accent">@color/orange_A400</color>
+
+    <color name="theme_100">@color/green_100</color>
+    <color name="theme_200">@color/green_200</color>
+    <color name="theme_300">@color/green_300</color>
+    <color name="theme_400">@color/green_400</color>
+    <color name="theme_500">@color/green_500</color>
+    <color name="theme_600">@color/green_600</color>
+    <color name="theme_700">@color/green_700</color>
+    <color name="theme_800">@color/green_800</color>
+    <color name="theme_900">@color/green_900</color>
+
+    <!-- PLEN theme -->
+    <color name="plen_green">#00a73c</color>
+    <color name="plen_green_dark">#00983a</color>
+    <color name="plen_white">#FFFDFB</color>
+    <color name="plen_black">#261400</color>
+    <color name="plen_light_grey">#D3C6AC</color>
+</resources>
