@@ -202,6 +202,14 @@ public class MainActivity extends Activity implements IMainActivity {
         );
         
         homeButton.setOnClickListener(v -> {
+            int progress = vs.getProgress();
+            int value = map[checkedNum];
+            String hexNum = String.format("%02x", value);
+            String deg = String.format("%03x", (progress - 900) & 0xFFF);
+            default_position[checkedNum] = progress - 900;
+            String program = "$ho" + hexNum + deg;
+            Log.d(TAG, program);
+            EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
         });
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
