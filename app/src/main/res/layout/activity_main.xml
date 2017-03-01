@@ -20,7 +20,6 @@
         android:layout_weight="0.8"
         android:layout_width="match_parent"
         android:id="@+id/plen"
-        android:src="@drawable/plen2"
         android:layout_gravity="center_horizontal"
         android:contentDescription="@string/image_plen" />
 

@@ -7,6 +7,8 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
@@ -31,6 +33,8 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -151,6 +155,8 @@ public class MainActivity extends Activity implements IMainActivity {
         vs.setProgress(default_position[0] + 900);
         tv.setText(String.valueOf(vs.getProgress()));
 
+        iv.setImageResource(R.drawable.s0);
+
         // 通信用Service起動
         bindService(new Intent(this, PlenConnectionService_.class), mPlenConnectionService, BIND_AUTO_CREATE);
         bindService(new Intent(this, PlenScanService_.class), mPlenScanService, BIND_AUTO_CREATE);
@@ -193,6 +199,14 @@ public class MainActivity extends Activity implements IMainActivity {
                             Log.d(TAG, String.valueOf(convertToJointNum(event.getX() / iv.getWidth(), event.getY() / iv.getHeight())));
                             checkedNum = convertToJointNum(event.getX() / iv.getWidth(), event.getY() / iv.getHeight());
                             vs.setProgress(default_position[checkedNum] + 900);
+
+                            try {
+                                InputStream istream = getResources().getAssets().open("joint_selected_plen2/s" + map[checkedNum] + ".png");
+                                Bitmap bitmap = BitmapFactory.decodeStream(istream);
+                                iv.setImageBitmap(bitmap);
+                            } catch (IOException e) {
+                                Log.d("Assets","Error");
+                            }
 
                             updateToolbar();
                             break;
