@@ -59,6 +59,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
 
+
 @EActivity(R.layout.activity_main)
 public class MainActivity extends Activity implements IMainActivity {
     private String TAG = "MainActivity";
@@ -100,30 +101,31 @@ public class MainActivity extends Activity implements IMainActivity {
     private final CompositeSubscription mSubscriptions = new CompositeSubscription();
     @Bean PlenConnectionActivityPresenter mPresenter;
 
-    private int map[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 13, 14, 15, 16, 17, 18, 19, 20};
-    private int default_position[] = {
-            -40, 245, 470, -100, -205, 50, 445, 245, -75, 15, -70, -390, 250, 195, -105, -510, -305, 60
+    private final int map[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 13, 14, 15, 16, 17, 18, 19, 20};
+    private final int default_position[] = {
+            -300, 0, 375, 50, -450, -300, 500, 200, 450, 300, 0, -375, -50, 450, 300, -500, -200, -450
     };
 
-    private float JointButtonLocation[][] = {
-            {653, 345},
-            {665, 491},
-            {858, 259},
-            {950, 483},
-            {729, 649},
-            {817, 776},
-            {645, 905},
-            {820, 1096},
-            {707, 1195},
+    private final float JointButtonLocation[][] = {
+            {653, 350},
+            {665, 500},
+            {858, 260},
+            {950, 480},
+            {729, 650},
+            {817, 780},
+            {645, 900},
+            {820, 1100},
+            {707, 1200},
+
             {449, 350},
-            {430, 517},
-            {259, 232},
-            {159, 486},
-            {382, 669},
-            {270, 799},
-            {441, 915},
-            {281, 1097},
-            {377, 1184}
+            {430, 500},
+            {259, 260},
+            {159, 480},
+            {382, 650},
+            {270, 780},
+            {441, 900},
+            {281, 1100},
+            {377, 1200}
     };
 
     /**
