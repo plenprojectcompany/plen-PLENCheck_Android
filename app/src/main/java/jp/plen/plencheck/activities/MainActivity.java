@@ -28,9 +28,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.jakewharton.rxbinding.widget.RxSeekBar;
 import com.jakewharton.rxbinding.widget.SeekBarProgressChangeEvent;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.UiThread;
+import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.io.IOException;
@@ -57,15 +59,22 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
 
-@EActivity
+@EActivity(R.layout.activity_main)
 public class MainActivity extends Activity implements IMainActivity {
     private String TAG = "MainActivity";
     private static final String SCANNING_DIALOG = PlenScanningDialogFragment.class.getSimpleName();
     private static final String SELECT_PLEN_DIALOG = SelectPlenDialogFragment.class.getSimpleName();
     private static final String OSS_LICENSES_DIALOG = OpenSourceLicensesDialogFragment.class.getSimpleName();
     private static final String LOCATION_SETTING_DIALOG = LocationSettingRequestDialogFragment.class.getSimpleName();
-    private boolean isClearChecked = false;
     private int checkedNum = 0;
+
+    @ViewById(R.id.seekBar) SeekBar vs;
+    @ViewById(R.id.textView)TextView tv;
+    @ViewById(R.id.plen) ImageView iv;
+    @ViewById(R.id.buttonup) Button bup;
+    @ViewById(R.id.buttondown) Button dup;
+    @ViewById(R.id.button) Button homeButton;
+    @ViewById(R.id.toolbar) Toolbar mToolbar;
 
     private final ServiceConnection mPlenConnectionService = new ServiceConnection() {
         @Override
@@ -90,7 +99,6 @@ public class MainActivity extends Activity implements IMainActivity {
     @Pref MainPreferences_ mPref;
     private final CompositeSubscription mSubscriptions = new CompositeSubscription();
     @Bean PlenConnectionActivityPresenter mPresenter;
-    Toolbar mToolbar;
 
     private int map[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 13, 14, 15, 16, 17, 18, 19, 20};
     private int default_position[] = {
@@ -129,102 +137,23 @@ public class MainActivity extends Activity implements IMainActivity {
                 &&  (centerY+margin >= pushedY && centerY-margin <= pushedY);
     }
 
-    private int convertToJointNum(double x, double y) {
+    private int convertToJointNum(double x, double y, int prevNum) {
         for(int i = 0; i < 18; i++) {
             if(isInRange(JointButtonLocation[i][0]/1080, JointButtonLocation[i][1]/1296, x, y, 0.05)) {
                 return i;
             }
         }
-        return 0;
+        return prevNum;
     }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        final SeekBar vs = (SeekBar) findViewById(R.id.seekBar);
-        final TextView tv = (TextView) findViewById(R.id.textView);
-        final ImageView iv = (ImageView) findViewById(R.id.plen);
-        final Button bup = (Button) findViewById(R.id.buttonup);
-        final Button dup = (Button) findViewById(R.id.buttondown);
-        final Button homeButton = (Button) findViewById(R.id.button);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        vs.setProgress(default_position[0] + 900);
-        tv.setText(String.valueOf(vs.getProgress()));
-
-        iv.setImageResource(R.drawable.s0);
 
         // 通信用Service起動
         bindService(new Intent(this, PlenConnectionService_.class), mPlenConnectionService, BIND_AUTO_CREATE);
         bindService(new Intent(this, PlenScanService_.class), mPlenScanService, BIND_AUTO_CREATE);
-
-
-        // SeekBarの変更イベント管理
-        mSubscriptions.add(
-                RxSeekBar.changeEvents(vs)
-                        .ofType(SeekBarProgressChangeEvent.class)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doOnNext(seekBarChangeEvent -> {
-                            int progress = seekBarChangeEvent.progress();
-                            tv.setText(String.valueOf(progress - 900));
-                            default_position[checkedNum] = progress - 900;
-                            Log.d(TAG, "changeEvent");
-                        })
-                        .throttleFirst(100, TimeUnit.MILLISECONDS)
-                        .subscribe(seekBarChangeEvent -> {
-                            int progress = seekBarChangeEvent.progress();
-                            int value = map[checkedNum];
-                            String hexNum = String.format("%02x", value);
-                            String deg = String.format("%03x", (progress - 900) & 0xFFF);
-                            default_position[checkedNum] = progress - 900;
-                            String program = "$an" + hexNum + deg;
-                            Log.d(TAG, program);
-                            EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
-                        })
-        );
-
-        updateToolbar();
-
-        bup.setOnTouchListener(new RepeatListner(400, 50, v -> vs.setProgress(vs.getProgress() + 1)));
-
-        dup.setOnTouchListener(new RepeatListner(400, 50, v -> vs.setProgress(vs.getProgress() - 1)));
-
-        iv.setOnTouchListener(
-                (v, event) -> {
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            Log.d(TAG, String.valueOf(convertToJointNum(event.getX() / iv.getWidth(), event.getY() / iv.getHeight())));
-                            checkedNum = convertToJointNum(event.getX() / iv.getWidth(), event.getY() / iv.getHeight());
-                            vs.setProgress(default_position[checkedNum] + 900);
-
-                            try {
-                                InputStream istream = getResources().getAssets().open("joint_selected_plen2/s" + map[checkedNum] + ".png");
-                                Bitmap bitmap = BitmapFactory.decodeStream(istream);
-                                iv.setImageBitmap(bitmap);
-                            } catch (IOException e) {
-                                Log.d("Assets","Error");
-                            }
-
-                            updateToolbar();
-                            break;
-                    }
-                    return false;
-                }
-        );
-        
-        homeButton.setOnClickListener(v -> {
-            int progress = vs.getProgress();
-            int value = map[checkedNum];
-            String hexNum = String.format("%02x", value);
-            String deg = String.format("%03x", (progress - 900) & 0xFFF);
-            default_position[checkedNum] = progress - 900;
-            String program = "$ho" + hexNum + deg;
-            Log.d(TAG, program);
-            EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
-        });
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -263,6 +192,81 @@ public class MainActivity extends Activity implements IMainActivity {
         unbindService(mPlenScanService);
         super.onDestroy();
     }
+
+    @AfterViews
+    void afterviews(){
+
+        vs.setProgress(default_position[0] + 900);
+        tv.setText(String.valueOf(vs.getProgress()));
+        iv.setImageResource(R.drawable.s0);
+
+        // SeekBarの変更イベント管理
+        mSubscriptions.add(
+                RxSeekBar.changeEvents(vs)
+                        .ofType(SeekBarProgressChangeEvent.class)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnNext(seekBarChangeEvent -> {
+                            int progress = seekBarChangeEvent.progress();
+                            tv.setText(String.valueOf(progress - 900));
+                            default_position[checkedNum] = progress - 900;
+                            Log.d(TAG, "changeEvent");
+                        })
+                        .throttleFirst(100, TimeUnit.MILLISECONDS)
+                        .subscribe(seekBarChangeEvent -> {
+                            int progress = seekBarChangeEvent.progress();
+                            int value = map[checkedNum];
+                            String hexNum = String.format("%02x", value);
+                            String deg = String.format("%03x", (progress - 900) & 0xFFF);
+                            default_position[checkedNum] = progress - 900;
+                            String program = "$an" + hexNum + deg;
+                            Log.d(TAG, program);
+                            EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
+                        })
+        );
+
+        updateToolbar();
+
+        bup.setOnTouchListener(new RepeatListner(400, 50, v -> vs.setProgress(vs.getProgress() + 1)));
+
+        dup.setOnTouchListener(new RepeatListner(400, 50, v -> vs.setProgress(vs.getProgress() - 1)));
+
+        iv.setOnTouchListener(
+                (v, event) -> {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            Log.d(TAG, String.valueOf(convertToJointNum(event.getX() / iv.getWidth(), event.getY() / iv.getHeight(), checkedNum)));
+
+                            checkedNum = convertToJointNum(event.getX() / iv.getWidth(), event.getY() / iv.getHeight(), checkedNum);
+                            vs.setProgress(default_position[checkedNum] + 900);
+
+                            try {
+                                InputStream istream = getResources().getAssets().open("joint_selected_plen2/s" + map[checkedNum] + ".png");
+                                Bitmap bitmap = BitmapFactory.decodeStream(istream);
+                                iv.setImageBitmap(bitmap);
+                            } catch (IOException e) {
+                                Log.d("Assets","Error");
+                            }
+
+                            updateToolbar();
+                            break;
+                    }
+                    return false;
+                }
+        );
+
+        homeButton.setOnClickListener(v -> {
+            int progress = vs.getProgress();
+            int value = map[checkedNum];
+            String hexNum = String.format("%02x", value);
+            String deg = String.format("%03x", (progress - 900) & 0xFFF);
+            default_position[checkedNum] = progress - 900;
+            String program = "$ho" + hexNum + deg;
+            Log.d(TAG, program);
+            EventBus.getDefault().post(new PlenConnectionService.WriteRequest(program));
+        });
+
+    }
+
 
     @Override
     public void notifyBluetoothUnavailable() {
