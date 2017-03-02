@@ -2,32 +2,109 @@
 <items version="2" >
 
     <item
-        jar="/Users/yuki/Workspace/PLENCheck/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
+        jar="/Users/Kazu/.gradle/caches/modules-2/files-2.1/org.androidannotations/androidannotations-api/4.0.0/8ef59050fdc527130b8f1f5689164a1ec0ebc13c/androidannotations-api-4.0.0.jar"
         jumboMode="false"
-        revision="21.1.2"
-        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
-        <dex dex="/Users/yuki/Workspace/PLENCheck/app/build/intermediates/pre-dexed/debug/classes-c4b3d89443d286192ec96822de2c9c17fe99ba6e.jar" />
+        revision="23.0.0"
+        sha1="8ef59050fdc527130b8f1f5689164a1ec0ebc13c">
+        <dex dex="/Users/Kazu/Documents/PLEN/plen-PLENCheck_Android/app/build/intermediates/pre-dexed/debug/androidannotations-api-4.0.0-f8c9eb0d14fa5512c470f619c8af20bd6b31cac0.jar" />
     </item>
     <item
-        jar="/Users/yuki/Workspace/PLENCheck/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
+        jar="/Users/Kazu/Documents/PLEN/plen-PLENCheck_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.1.0/jars/classes.jar"
         jumboMode="false"
-        revision="21.1.2"
-        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
-        <dex dex="/Users/yuki/Workspace/PLENCheck/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-8a13b716967edac3b40381f4d28cc46d3bcb59cc.jar" />
+        revision="23.0.0"
+        sha1="d0dda274b703dd9c5bb056867649d22b4171ae7d">
+        <dex dex="/Users/Kazu/Documents/PLEN/plen-PLENCheck_Android/app/build/intermediates/pre-dexed/debug/classes-699f14304151566f7ccaf9a2dc8743b7a383c306.jar" />
     </item>
     <item
-        jar="/Users/yuki/Workspace/PLENCheck/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/classes.jar"
+        jar="/Users/Kazu/Documents/PLEN/plen-PLENCheck_Android/app/build/intermediates/exploded-aar/com.jakewharton.rxbinding/rxbinding/0.4.0/jars/classes.jar"
         jumboMode="false"
-        revision="21.1.2"
-        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
-        <dex dex="/Users/yuki/Workspace/PLENCheck/app/build/intermediates/pre-dexed/debug/classes-58e60bc66aae9954e5047c8805194d2f3f8839c6.jar" />
+        revision="23.0.0"
+        sha1="ffc09f4e5bdebe068e5101f587dadc42b60fbfe4">
+        <dex dex="/Users/Kazu/Documents/PLEN/plen-PLENCheck_Android/app/build/intermediates/pre-dexed/debug/classes-6c42ef029c06e388b9d69c9ce32c22b51f49bbaf.jar" />
     </item>
     <item
-        jar="/Applications/adt-bundle-mac-x86_64/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
+        jar="/Users/Kazu/Documents/PLEN/plen-PLENCheck_Android/app/build/intermediates/exploded-aar/com.jakewharton.rxbinding/rxbinding-support-v4/0.4.0/jars/classes.jar"
         jumboMode="false"
-        revision="21.1.2"
-        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
-        <dex dex="/Users/yuki/Workspace/PLENCheck/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-5fcb6ab5b44a575924a36f3d1295945808dbeb08.jar" />
+        revision="23.0.0"
+        sha1="417b075934c24fa45ba94be0f451fd6dec69feb8">
+        <dex dex="/Users/Kazu/Documents/PLEN/plen-PLENCheck_Android/app/build/intermediates/pre-dexed/debug/classes-2e83e065f98e76ee1df2b1648d403857375f5d37.jar" />
+    </item>
+    <item
+        jar="/Users/Kazu/Documents/PLEN/plen-PLENCheck_Android/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="57ae0d750ff83f0c738d21720224ac7ea866a094">
+        <dex dex="/Users/Kazu/Documents/PLEN/plen-PLENCheck_Android/app/build/intermediates/pre-dexed/debug/classes-f3021c8248f7db2379998ecd284ee93e91bbdaea.jar" />
+    </item>
+    <item
+        jar="/Users/Kazu/.gradle/caches/modules-2/files-2.1/de.greenrobot/eventbus/2.4.0/ddd166d01b3158d1c00576d29f7ed15c030df719/eventbus-2.4.0.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="ddd166d01b3158d1c00576d29f7ed15c030df719">
+        <dex dex="/Users/Kazu/Documents/PLEN/plen-PLENCheck_Android/app/build/intermediates/pre-dexed/debug/eventbus-2.4.0-1d7abdbc2a65906d05f1ab4353b4e8bdb6777b16.jar" />
+    </item>
+    <item
+        jar="/Users/Kazu/.gradle/caches/modules-2/files-2.1/com.eccyan/rxjava-optional/1.1.0/ea9f53b77cdc29027ec4ada483b5cafeb44aca2/rxjava-optional-1.1.0.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="0ea9f53b77cdc29027ec4ada483b5cafeb44aca2">
+        <dex dex="/Users/Kazu/Documents/PLEN/plen-PLENCheck_Android/app/build/intermediates/pre-dexed/debug/rxjava-optional-1.1.0-2500b6d0fac7d27f4157ddfa329ec6cfa7b9ab12.jar" />
+    </item>
+    <item
+        jar="/Users/Kazu/Documents/PLEN/plen-PLENCheck_Android/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars/libs/internal_impl-23.1.0.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="8716243bf04bae8d6c9ca94d27b9a9be7236f0a3">
+        <dex dex="/Users/Kazu/Documents/PLEN/plen-PLENCheck_Android/app/build/intermediates/pre-dexed/debug/internal_impl-23.1.0-46bc4c8659b137fac81a29e5347eb4049b199b8d.jar" />
+    </item>
+    <item
+        jar="/Users/Kazu/.gradle/caches/modules-2/files-2.1/io.reactivex/rxjava/1.1.0/748f0546d5c3c27f1aef07270ffea0c45f0c42a4/rxjava-1.1.0.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="748f0546d5c3c27f1aef07270ffea0c45f0c42a4">
+        <dex dex="/Users/Kazu/Documents/PLEN/plen-PLENCheck_Android/app/build/intermediates/pre-dexed/debug/rxjava-1.1.0-09d281c1d4e81b1e4d6e769dcc6c21f0dfda46aa.jar" />
+    </item>
+    <item
+        jar="/Users/Kazu/Documents/PLEN/plen-PLENCheck_Android/app/build/intermediates/exploded-aar/com.jakewharton.rxbinding/rxbinding-appcompat-v7/0.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="cea3c0edbda1279bc261187fb3b6f874bfc841f4">
+        <dex dex="/Users/Kazu/Documents/PLEN/plen-PLENCheck_Android/app/build/intermediates/pre-dexed/debug/classes-3621576327a266fa73de1077dca7a8c82e05188e.jar" />
+    </item>
+    <item
+        jar="/Users/Kazu/Documents/PLEN/plen-PLENCheck_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="4477ea44f5ec5ad064022a22691732d7638ff197">
+        <dex dex="/Users/Kazu/Documents/PLEN/plen-PLENCheck_Android/app/build/intermediates/pre-dexed/debug/classes-d19460bdd38f23888748ff22166f0554dbef5a1d.jar" />
+    </item>
+    <item
+        jar="/Users/Kazu/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.1.0/support-annotations-23.1.0.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="92e3fc113ec3ee36b64603a38857b95700025633">
+        <dex dex="/Users/Kazu/Documents/PLEN/plen-PLENCheck_Android/app/build/intermediates/pre-dexed/debug/support-annotations-23.1.0-fee6b11b43d66734009c8e1714750f2538e68903.jar" />
+    </item>
+    <item
+        jar="/Users/Kazu/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.5.2/7446d06ec8d4f7ffcc53f1da37c95f200dcb9387/picasso-2.5.2.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
+        <dex dex="/Users/Kazu/Documents/PLEN/plen-PLENCheck_Android/app/build/intermediates/pre-dexed/debug/picasso-2.5.2-5c60d15d3b6906bce574ea01371acb70051450f0.jar" />
+    </item>
+    <item
+        jar="/Users/Kazu/Documents/PLEN/plen-PLENCheck_Android/app/build/intermediates/exploded-aar/io.reactivex/rxandroid/1.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="d4c4b83de2f6412072d2a29b1b7a5b03edaad5ff">
+        <dex dex="/Users/Kazu/Documents/PLEN/plen-PLENCheck_Android/app/build/intermediates/pre-dexed/debug/classes-f97e09f292f26ea3c6caaf8be2c2e08afd474537.jar" />
+    </item>
+    <item
+        jar="/Users/Kazu/Documents/PLEN/plen-PLENCheck_Android/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="ddde541c289c8b816a8f8fd6c325d80788c522a6">
+        <dex dex="/Users/Kazu/Documents/PLEN/plen-PLENCheck_Android/app/build/intermediates/pre-dexed/debug/classes-4b74455137f975a1e7ff5f8eda7f3deea214960b.jar" />
     </item>
 
 </items>
