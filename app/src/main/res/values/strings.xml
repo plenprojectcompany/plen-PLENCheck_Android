@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- app -->
-    <string name="app_name">PLEN Check</string>
+    <string name="app_name">PLEN Utils</string>
     <string name="action_settings">Settings</string>
 
     <!-- motion -->

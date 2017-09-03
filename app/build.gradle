@@ -10,7 +10,7 @@ android {
     buildToolsVersion "23.0.0"
 
     defaultConfig {
-        applicationId "jp.plen.plencheck"
+        applicationId "jp.plen.utils"
         minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
