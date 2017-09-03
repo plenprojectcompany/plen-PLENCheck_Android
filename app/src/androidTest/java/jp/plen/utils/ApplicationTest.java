@@ -1,4 +1,4 @@
-package jp.plen.plencheck;
+package jp.plen.utils;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

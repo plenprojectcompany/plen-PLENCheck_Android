@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/PLENCheck.iml" filepath="$PROJECT_DIR$/PLENCheck.iml" />
-      <module fileurl="file://$PROJECT_DIR$/PLENCheck4Android.iml" filepath="$PROJECT_DIR$/PLENCheck4Android.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plen-PLENCheck_Android.iml" filepath="$PROJECT_DIR$/plen-PLENCheck_Android.iml" />
     </modules>
   </component>
 </project>
